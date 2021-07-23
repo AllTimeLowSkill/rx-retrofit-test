@@ -17,6 +17,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var postListAdapter: PostAdapter
     private lateinit var  layoutManager:RecyclerView.LayoutManager
 
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -30,13 +32,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun testApi() {
-        val compositeDisposable = CompositeDisposable()
         compositeDisposable.add(
             ApiService.apiService.getPosts()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-
                     postListAdapter = PostAdapter(it)
                     postListAdapter.notifyDataSetChanged()
                     postList.adapter = postListAdapter
